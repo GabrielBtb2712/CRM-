@@ -7,3 +7,10 @@ def home_views(request):
     template_name = 'index.html'
     return render(request, template_name)
 
+
+def cliente_home_view(request):
+    template_name ='cliente/home.html'
+    return render(request, template_name)
+
+
+

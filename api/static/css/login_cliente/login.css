@@ -1,0 +1,19 @@
+.login_cliente {
+    text-align: center;           /* Centra el texto dentro del div */
+    display: flex;                /* Utiliza flexbox */
+    justify-content: center;      /* Centra horizontalmente */
+    align-items: center;          /* Centra verticalmente */
+    height: 100vh;               /* Altura del contenedor */
+}
+
+
+.icono_diente {
+    width: 50px;                 /* Ajusta el tamaño de la imagen */
+    height: auto;                /* Mantiene la proporción */
+}
+
+body {
+    margin: 0;                    /* Elimina el margen del body */
+    padding: 0;                   /* Elimina el padding del body */
+    height: 100vh;                /* Asegúrate de que el body tenga altura */
+}
