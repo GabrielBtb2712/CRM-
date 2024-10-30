@@ -21,10 +21,8 @@
             <div class="content-wrapper d-flex align-items-center auth px-0">
                 <div class="row w-100 mx-0">
                     <div class="col-lg-4 mx-auto">
-                        <div class="auth-form-light text-left py-5 px-4 px-sm-5">
-                            <div class="brand-logo">
-                                <img src="{% static 'images/logo.svg' %}" alt="logo">
-                            </div>
+                        <img src="{% static 'images/diente_cliente.png' %}" alt="icono_diente" class="icono_diente">
+
                             <h4>New here?</h4>
                             <h6 class="font-weight-light">Signing up is easy. It only takes a few steps</h6>
 
@@ -66,10 +64,11 @@
                                     </div>
                                 </div>
                                 <div class="mt-3">
-                                    <button type="submit"
-                                        class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn">SIGN
-                                        UP</button>
-                                </div>
+                                    <button type="submit" class="btn btn-block btn-lg font-weight-medium auth-form-btn" style="background-color: #11c49f; color: #fff;">SIGN IN</button>
+                                  </div>
+                                </form>
+
+
                                 <div class="text-center mt-4 font-weight-light">
                                     Already have an account? <a href="{% url 'login_cliente' %}" class="text-primary">Login</a>
                                 </div>
