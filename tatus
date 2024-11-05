@@ -1,0 +1,47 @@
+[33mcommit 78a81789a3a1539b7f5b9e7ec3752d329dadb383[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m
+Author: Dragon <gabriel2712bocanegrat@gmail.com>
+Date:   Fri Nov 1 21:02:55 2024 -0600
+
+     Se agrego la funcionalidad block content, a los perfiles de login user, y register
+
+[33mcommit 7744ac19259ebb477ab2519dd745c17a23742a70[m
+Author: Dragon <gabriel2712bocanegrat@gmail.com>
+Date:   Wed Oct 30 11:16:01 2024 -0600
+
+     Creacion de modelos de datos actualizada.
+
+[33mcommit cfc3f716f87855e714a49d8a50cb3fb7f2194525[m
+Author: Dragon <gabriel2712bocanegrat@gmail.com>
+Date:   Mon Oct 28 19:12:30 2024 -0600
+
+    Creacion de plantilla de login y registro para cliente_
+
+[33mcommit 6551b84385ccdd44812e572a342f2ee157b537ae[m
+Author: Dragon <gabriel2712bocanegrat@gmail.com>
+Date:   Sun Oct 27 13:11:27 2024 -0600
+
+    Creacion de plantilla de login y registro para cliente
+
+[33mcommit 139ef05594dad50eff47b44d5f8b5ff929327af4[m
+Author: Dragon <gabriel2712bocanegrat@gmail.com>
+Date:   Wed Oct 23 19:00:59 2024 -0600
+
+    Creacion de autentificacion y registro exitoso
+
+[33mcommit b90258f6a5f6d4ac67a0a92d2e63697f6b6f074d[m
+Author: Dragon <gabriel2712bocanegrat@gmail.com>
+Date:   Tue Oct 22 15:39:39 2024 -0600
+
+    Autentificacion creada
+
+[33mcommit 274b266d3165ea925130da197a5c16f777588913[m
+Author: Dragon <gabriel2712bocanegrat@gmail.com>
+Date:   Tue Oct 22 10:49:03 2024 -0600
+
+    Plantilla agregada
+
+[33mcommit d0947398b1ea692c222039435089c0134ab179e8[m
+Author: Dragon <gabriel2712bocanegrat@gmail.com>
+Date:   Mon Oct 21 10:39:28 2024 -0600
+
+    primera version api django

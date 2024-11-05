@@ -7,8 +7,7 @@ from django.contrib.auth import logout  # Importa la función logout de Django
 from django.shortcuts import redirect
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password
-
-
+from api.models import Usuarios, TipoUsuario
 
 
 
@@ -45,46 +44,57 @@ def cliente_login_view(request):
 
 # Registro de cliente
 
+
 def cliente_register_view(request):
     template_name = 'cliente/register_cliente.html'
 
     if request.method == 'POST':
-        username = request.POST.get('username')
         email = request.POST.get('email')
         password = request.POST.get('password') 
         confirm_password = request.POST.get('confirm_password')
+        nombre = request.POST.get('nombre')
+        apellido = request.POST.get('apellido')
+        telefono = request.POST.get('telefono')
 
         # Validar que las contraseñas coinciden
         if password != confirm_password:
             messages.error(request, 'Las contraseñas no coinciden.')
             return render(request, template_name)
 
-        # Verificar si el usuario ya existe
-        if User.objects.filter(username=username).exists():
-            messages.error(request, 'El nombre de usuario ya está en uso.')
-            return render(request, template_name)
-
+        # Validar que el correo electrónico no esté registrado en el modelo `User`
         if User.objects.filter(email=email).exists():
             messages.error(request, 'Ya hay una cuenta con este correo electrónico.')
             return render(request, template_name)
 
-        # Crear el nuevo usuario con contraseña hasheada
         try:
-            user = User(
-                username=username, 
-                email=email, 
-                password=make_password(password),
-                is_active=0  # Desactivar el usuario después de registrarlo
+            # Crear el usuario de Django
+            user = User.objects.create_user(
+                username=email,  # Puedes usar el correo como nombre de usuario
+                password=password,
+                email=email,
+                first_name=nombre,
+                last_name=apellido
             )
-            user.save()
+
+            # Crear una instancia de `Usuarios` y asociarla al `User` recién creado
+            tipo_usuario = TipoUsuario.objects.get(tipo_usuario_id=1)  # Asumiendo tipo de usuario con ID 1
+            usuario_personalizado = Usuarios.objects.create(
+                usuario=user,
+                nombre=nombre,
+                apellido=apellido,
+                email=email,
+                telefono=telefono,
+                tipo_usuario=tipo_usuario
+            )
+
             messages.success(request, '¡Registro exitoso! Ahora puedes iniciar sesión.')
-            return redirect('login_cliente')  # Redirige a la página de inicio de sesión
+            return redirect('login_cliente')  # Redirige a la vista de inicio de sesión
+
         except Exception as e:
             messages.error(request, f'Error al registrar el usuario: {e}')
             return render(request, template_name)
 
     return render(request, template_name)
-
 
 # Login de Doctor
 
@@ -119,45 +129,59 @@ def login_view(request):
     return render(request, template_name)
 
 
+
+
 def register_view(request):
-    template_name = "register.html"
+    template_name = 'register.html'
 
     if request.method == 'POST':
-        username = request.POST.get('username')
         email = request.POST.get('email')
         password = request.POST.get('password') 
         confirm_password = request.POST.get('confirm_password')
+        nombre = request.POST.get('nombre')
+        apellido = request.POST.get('apellido')
+        telefono = request.POST.get('telefono')
 
         # Validar que las contraseñas coinciden
         if password != confirm_password:
             messages.error(request, 'Las contraseñas no coinciden.')
             return render(request, template_name)
 
-        # Verificar si el usuario ya existe
-        if User.objects.filter(username=username).exists():
-            messages.error(request, 'El nombre de usuario ya está en uso.')
-            return render(request, template_name)
-
+        # Validar que el correo electrónico no esté registrado en el modelo `User`
         if User.objects.filter(email=email).exists():
             messages.error(request, 'Ya hay una cuenta con este correo electrónico.')
             return render(request, template_name)
 
-        # Crear el nuevo usuario con contraseña hasheada
         try:
-            user = User(
-                username=username, 
-                email=email, 
-                password=make_password(password),
-                is_active=0  # Desactivar el usuario después de registrarlo
+            # Crear el usuario de Django
+            user = User.objects.create_user(
+                username=email,  # Puedes usar el correo como nombre de usuario
+                password=password,
+                email=email,
+                first_name=nombre,
+                last_name=apellido
             )
-            user.save()
+
+            # Crear una instancia de `Usuarios` y asociarla al `User` recién creado
+            tipo_usuario = TipoUsuario.objects.get(tipo_usuario_id=0)  # Asumiendo tipo de usuario con ID 1
+            usuario_personalizado = Usuarios.objects.create(
+                usuario=user,
+                nombre=nombre,
+                apellido=apellido,
+                email=email,
+                telefono=telefono,
+                tipo_usuario=tipo_usuario
+            )
+
             messages.success(request, '¡Registro exitoso! Ahora puedes iniciar sesión.')
-            return redirect('login')  # Redirige a la página de inicio de sesión
+            return redirect('login')  # Redirige a la vista de inicio de sesión
+
         except Exception as e:
             messages.error(request, f'Error al registrar el usuario: {e}')
             return render(request, template_name)
 
     return render(request, template_name)
+
 
 # Forget password ?
 

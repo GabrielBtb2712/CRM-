@@ -1,4 +1,6 @@
 from django.db import models
+from django.contrib.auth.models import User
+
 
 class TipoUsuario(models.Model):
     tipo_usuario_id = models.AutoField(primary_key=True)
@@ -8,16 +10,16 @@ class TipoUsuario(models.Model):
         db_table = "tipo_usuario"
 
 class Usuarios(models.Model):
-    usuario_id = models.AutoField(primary_key=True)
-    nombre = models.CharField(max_length=255, default='')  # Valor predeterminado vacío
-    apellido = models.CharField(max_length=255, default='')  # Valor predeterminado vacío
-    email = models.EmailField(unique=True, default='')  # Valor predeterminado vacío
-    telefono = models.CharField(max_length=20, default='')  # Valor predeterminado vacío
-    tipo_usuario = models.ForeignKey(TipoUsuario, on_delete=models.CASCADE,default=1)
+    usuario = models.OneToOneField(User, on_delete=models.CASCADE)  # Relación uno a uno con el modelo User de Django
+    nombre = models.CharField(max_length=255)
+    apellido = models.CharField(max_length=255)
+    email = models.EmailField(unique=True)
+    telefono = models.CharField(max_length=20)
+    tipo_usuario = models.ForeignKey(TipoUsuario, on_delete=models.CASCADE)
 
     class Meta:
         db_table = "usuarios"
-
+        
 class Pacientes(models.Model):
     paciente_id = models.AutoField(primary_key=True)
     usuario = models.OneToOneField(Usuarios, on_delete=models.CASCADE)
