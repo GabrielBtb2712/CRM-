@@ -31,14 +31,44 @@
     <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
       <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
         <a class="navbar-brand brand-logo mr-5" href="index.html">
-          <img src="{% static 'images/logo.svg' %}" class="mr-2" alt="logo" />
+          <img src="{% static 'images/limpieza_dientes.png' %}" class="mr-2" alt="logo" />
         </a>
         <a class="navbar-brand brand-logo-mini" href="index.html">
-          <img src="{% static 'images/logo-mini.svg' %}" alt="logo" />
+          <img src="{% static 'images/limpieza_dientes.png' %}" alt="logo" />
         </a>
       </div>
+      <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
+        data-toggle="offcanvas">
+        <span class="icon-menu"></span>
+      </button>
     </nav>
+    <!-- Scripts necesarios para el funcionamiento de la barra lateral -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.min.js"></script>
 
+    <script>
+      $(document).ready(function () {
+        $('.nav-link[data-toggle="collapse"]').click(function (e) {
+          var target = $(this).attr('href');
+
+          // Verificar si el elemento objetivo ya está expandido
+          if ($(target).hasClass('show')) {
+            // Si está expandido, lo colapsamos
+            $(target).collapse('hide');
+          } else {
+            // Si no está expandido, primero cerramos otros colapsos
+            $('.collapse.show').collapse('hide');
+            // Luego expandimos el objetivo
+            $(target).collapse('show');
+          }
+
+          e.preventDefault(); // Evitar comportamiento predeterminado de redireccionamiento si el href es un hash (#)
+        });
+      });
+
+
+    </script>
 
 
     <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
@@ -257,6 +287,8 @@
         <!-- chat tab ends -->
       </div>
     </div>
+
+
     <!-- partial -->
     <!-- partial:partials/_sidebar.html -->
     <nav class="sidebar sidebar-offcanvas" id="sidebar">
@@ -343,7 +375,7 @@
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'logout' %}" id="logoutLink">Logout</a>
               </li>
-              
+
             </ul>
           </div>
         </li>
@@ -368,6 +400,16 @@
         </li>
       </ul>
     </nav>
+
+
+
+
+
+
+
+
+
+
     <!-- partial -->
     <div class="main-panel">
       <div class="content-wrapper">
@@ -1135,32 +1177,32 @@
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
         <script>
-          document.addEventListener('DOMContentLoaded', function() {
-              const logoutUrl = "{% url 'logout' %}";  // Guardar la URL en una variable
-              const logoutLink = document.getElementById('logoutLink');  // Seleccionar el enlace por ID
-        
-              logoutLink.addEventListener('click', function(event) {
-                  event.preventDefault();  // Evitar el comportamiento por defecto del enlace
-        
-                  Swal.fire({
-                      title: '¿Estás seguro?',
-                      text: '¿Quieres cerrar sesión?',
-                      icon: 'warning',
-                      showCancelButton: true,
-                      confirmButtonColor: '#3085d6',
-                      cancelButtonColor: '#d33',
-                      confirmButtonText: 'Salir',
-                      cancelButtonText: 'Cancelar'
-                  }).then((result) => {
-                      if (result.isConfirmed) {
-                          window.location.href = logoutUrl;  // Redirigir a la URL de logout
-                      }
-                  });
+          document.addEventListener('DOMContentLoaded', function () {
+            const logoutUrl = "{% url 'logout' %}";  // Guardar la URL en una variable
+            const logoutLink = document.getElementById('logoutLink');  // Seleccionar el enlace por ID
+
+            logoutLink.addEventListener('click', function (event) {
+              event.preventDefault();  // Evitar el comportamiento por defecto del enlace
+
+              Swal.fire({
+                title: '¿Estás seguro?',
+                text: '¿Quieres cerrar sesión?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Salir',
+                cancelButtonText: 'Cancelar'
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  window.location.href = logoutUrl;  // Redirigir a la URL de logout
+                }
               });
+            });
           });
         </script>
-        
-  
+
+
 
 </body>
 

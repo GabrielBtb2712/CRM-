@@ -11,37 +11,50 @@ from api.models import Usuarios, TipoUsuario
 
 
 
-# Login de cliente
-
 def cliente_login_view(request):
     template_name = 'cliente/login_cliente.html'
-    # Verifica si el usuario ya estácd autenticado
+    
+    # Verifica si el usuario ya está autenticado
     if request.user.is_authenticated:
         return redirect('cliente/home')
 
     # Verifica si el método de solicitud es POST
     if request.method == 'POST':
-        # Obtén el correo electrónico del formulario (nombre del campo 'username' en el formulario)
-        email = request.POST['username']
-        password = request.POST['password']
+        # Obtén el correo electrónico y la contraseña del formulario
+        email = request.POST.get('username')
+        password = request.POST.get('password')
 
         try:
             # Busca el usuario en la base de datos usando el correo
             user = User.objects.get(email=email)
-            # Autentica al usuario con su username y contraseña
-            user = authenticate(request, username=user.username, password=password)
 
-            if user is not None:
-                login(request, user)
-                messages.success(request, 'Inicio de sesión exitoso.')
-                return redirect('cliente/home')
+            # Obtén el objeto de la relación `Usuarios` para verificar el tipo de usuario
+            usuario = Usuarios.objects.get(usuario=user)
+
+            # Verifica si el usuario tiene el tipo de usuario permitido
+            tipo_usuario_cliente = TipoUsuario.objects.get(tipo_usuario_id=1)
+            if usuario.tipo_usuario == tipo_usuario_cliente:  # Verifica el tipo de usuario
+
+                # Autentica al usuario con su username y contraseña
+                user = authenticate(request, username=user.username, password=password)
+
+                if user is not None:
+                    login(request, user)
+                    messages.success(request, 'Inicio de sesión exitoso.')
+                    return redirect('cliente/home')
+                else:
+                    messages.error(request, 'Credenciales de inicio de sesión inválidas')
             else:
-                messages.error(request, 'Credenciales de inicio de sesión inválidas')
+                messages.error(request, 'No tienes permiso para iniciar sesión')
+
         except User.DoesNotExist:
             messages.error(request, 'No existe un usuario con ese correo electrónico')
+        except Usuarios.DoesNotExist:
+            messages.error(request, 'No se encontró un perfil asociado al usuario')
+        except TipoUsuario.DoesNotExist:
+            messages.error(request, 'Tipo de usuario no encontrado')
 
     return render(request, template_name)
-
 # Registro de cliente
 
 
@@ -100,31 +113,46 @@ def cliente_register_view(request):
 
 def login_view(request):
     template_name = 'login.html'
-
-    # Verifica si el usuario ya estácd autenticado
+    
+    # Verifica si el usuario ya está autenticado
     if request.user.is_authenticated:
         return redirect('index')
 
     # Verifica si el método de solicitud es POST
     if request.method == 'POST':
-        # Obtén el correo electrónico del formulario (nombre del campo 'username' en el formulario)
-        email = request.POST['username']
-        password = request.POST['password']
+        # Obtén el correo electrónico y la contraseña del formulario
+        email = request.POST.get('username')
+        password = request.POST.get('password')
 
         try:
             # Busca el usuario en la base de datos usando el correo
             user = User.objects.get(email=email)
-            # Autentica al usuario con su username y contraseña
-            user = authenticate(request, username=user.username, password=password)
 
-            if user is not None:
-                login(request, user)
-                messages.success(request, 'Inicio de sesión exitoso.')
-                return redirect('index')
+            # Obtén el objeto de la relación `Usuarios` para verificar el tipo de usuario
+            usuario = Usuarios.objects.get(usuario=user)
+
+            # Verifica si el usuario tiene el tipo de usuario permitido
+            tipo_usuario_cliente = TipoUsuario.objects.get(tipo_usuario_id=0)
+            if usuario.tipo_usuario == tipo_usuario_cliente:  # Verifica el tipo de usuario
+
+                # Autentica al usuario con su username y contraseña
+                user = authenticate(request, username=user.username, password=password)
+
+                if user is not None:
+                    login(request, user)
+                    messages.success(request, 'Inicio de sesión exitoso.')
+                    return redirect('index')
+                else:
+                    messages.error(request, 'Credenciales de inicio de sesión inválidas')
             else:
-                messages.error(request, 'Credenciales de inicio de sesión inválidas')
+                messages.error(request, 'No tienes permiso para iniciar sesión')
+
         except User.DoesNotExist:
             messages.error(request, 'No existe un usuario con ese correo electrónico')
+        except Usuarios.DoesNotExist:
+            messages.error(request, 'No se encontró un perfil asociado al usuario')
+        except TipoUsuario.DoesNotExist:
+            messages.error(request, 'Tipo de usuario no encontrado')
 
     return render(request, template_name)
 
@@ -191,7 +219,17 @@ def forget_passsword(request):
 
 
 def logout_view(request):
-    logout(request)  # Esto cierra la sesión del usuario actual
-    return redirect('login') 
-
-
+    logout(request)
+    
+    # Verifica el origen de la solicitud para determinar la redirección
+    referer = request.META.get('HTTP_REFERER', '')
+    
+    if 'index' in referer:
+        # Si la URL de referencia contiene 'index', redirige a 'login'
+        return redirect('login')
+    elif 'home' in referer:
+        # Si la URL de referencia contiene 'home', redirige a 'login_cliente'
+        return redirect('login_cliente')
+    else:
+        # Redirección predeterminada en caso de que no coincida ninguna condición
+        return redirect('login')    

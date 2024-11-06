@@ -9,8 +9,15 @@ def home_views(request):
 
 
 def cliente_home_view(request):
-    template_name ='cliente/home.html'
+    template_name = 'cliente/home.html'
+    nombre_completo = f"{request.user.first_name} {request.user.last_name}"
+    context = {
+                'nombre_usuario': nombre_completo
+    }
+    return render(request, template_name, context)
+
+
+
+def citas_views(request):
+    template_name = 'cliente/citas.html'
     return render(request, template_name)
-
-
-
