@@ -29,23 +29,49 @@ class Pacientes(models.Model):
     class Meta:
         db_table = "pacientes"
 
+
+class Especialidad(models.Model):
+    especialidad_id = models.AutoField(primary_key=True)
+    nombre = models.CharField(max_length=255, unique=True)  # Nombre de la especialidad
+
+    class Meta:
+        db_table = "especialidades"
+
+
+
+
 class Doctores(models.Model):
     doctor_id = models.AutoField(primary_key=True)
     usuario = models.OneToOneField(Usuarios, on_delete=models.CASCADE)
-    especialidad = models.CharField(max_length=255, default='')  # Valor predeterminado vacío
+    especialidad = models.ForeignKey(Especialidad, on_delete=models.CASCADE)  # Clave foránea a `Especialidad`
 
     class Meta:
         db_table = "doctores"
 
+        
+class TipoTratamiento(models.Model):
+    tipo_tratamiento_id = models.AutoField(primary_key=True)
+    tipo_tratamiento = models.CharField(max_length=255)
+
+    class Meta:
+        db_table = "tipo_tratamiento"
+
+
 class Tratamientos(models.Model):
     tratamiento_id = models.AutoField(primary_key=True)
-    descripcion = models.TextField(default='')  # Valor predeterminado vacío
-    costo = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)  # Valor predeterminado
-    fecha_inicio = models.DateField(default='1900-01-01')  # Valor predeterminado
-    fecha_fin = models.DateField(default='1900-01-01')  # Valor predeterminado
+    tipo_tratamiento = models.ForeignKey(
+        TipoTratamiento, 
+        on_delete=models.CASCADE, 
+        default=1 
+    ) 
+    descripcion = models.TextField(default='')
+    costo = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    fecha_inicio = models.DateField(default='1900-01-01')
+    fecha_fin = models.DateField(default='1900-01-01')
 
     class Meta:
         db_table = "tratamientos"
+
 
 class Citas(models.Model):
     cita_id = models.AutoField(primary_key=True)
@@ -63,9 +89,13 @@ class Citas(models.Model):
         ],
         default='pendiente'  # Valor predeterminado
     )
+    tratamiento = models.ForeignKey(
+        Tratamientos, on_delete=models.SET_NULL, null=True, blank=True
+    )  # Relación opcional con Tratamientos
 
     class Meta:
         db_table = "citas"
+
 
 class Pagos(models.Model):
     pago_id = models.AutoField(primary_key=True)

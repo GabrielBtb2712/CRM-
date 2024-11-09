@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required 
 from api.home.value_const import LOGIN_URL
+from api.models import Doctores,TipoTratamiento
 # Create your views here.
 @login_required(login_url=LOGIN_URL)
 def home_views(request):
@@ -19,5 +20,15 @@ def cliente_home_view(request):
 
 
 def citas_views(request):
+    doctores = Doctores.objects.all()  # No la coma al final
+    tratamiento = TipoTratamiento.objects.all()  # Sin la coma al final
     template_name = 'cliente/citas.html'
-    return render(request, template_name)
+    
+    # Unificar ambos diccionarios en uno solo
+    context = {
+        'doctores': doctores,
+        'tratamiento': tratamiento,
+    }
+    
+    return render(request, template_name, context)
+

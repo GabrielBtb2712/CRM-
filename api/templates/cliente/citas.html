@@ -11,10 +11,10 @@
 <body>
     <div class="container mt-4">
         <h2>Agendar Cita</h2>
-        <form>
+        <form method="post">
             <div class="form-group">
                 <label for="servicio">Servicio</label>
-                <select class="form-control" id="servicio">
+                <select class="form-control" id="servicio" name="servicio">
                     <option>Consulta médica</option>
                     <option>Asesoría</option>
                     <option>Revisión</option>
@@ -22,14 +22,43 @@
                 </select>
             </div>
 
+         
+            
+
+
+            <!-- Selección del doctor -->
+            <div class="form-group">
+                <label for="doctor">Doctor</label>
+                <select class="form-control" id="doctor" name="doctor">
+                    {% for doctor in doctores %}
+                    <option value="{{ doctor.doctor_id }}">{{ doctor.usuario.nombre }} {{ doctor.usuario.apellido }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+
+            <!-- Selección del doctor -->
+            <div class="form-group">
+                <label for="doctor">Tratamiento</label>
+                <select class="form-control" id="tratamiento" name="tratamiento">
+                    {% for tratamiento in tratamiento %}
+                    <option value="{{ tratamiento.tratamiento_id }}">{{ tratamiento.tipo_tratamiento }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+
+
             <div class="form-group">
                 <label for="fecha">Fecha</label>
-                <input type="date" class="form-control" id="fecha">
+                <input type="date" class="form-control" id="fecha" name="fecha">
             </div>
 
             <div class="form-group">
                 <label for="hora">Hora</label>
-                <select class="form-control" id="hora">
+                <select class="form-control" id="hora" name="hora">
                     <option>09:00 AM</option>
                     <option>10:00 AM</option>
                     <option>11:00 AM</option>
@@ -41,11 +70,12 @@
 
             <div class="form-group">
                 <label for="comentarios">Comentarios o Notas (opcional)</label>
-                <textarea class="form-control" id="comentarios" rows="3"></textarea>
+                <textarea class="form-control" id="comentarios" name="comentarios" rows="3"></textarea>
             </div>
 
             <button type="submit" class="btn btn-primary">Confirmar Cita</button>
         </form>
+
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

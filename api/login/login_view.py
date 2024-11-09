@@ -7,7 +7,7 @@ from django.contrib.auth import logout  # Importa la función logout de Django
 from django.shortcuts import redirect
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password
-from api.models import Usuarios, TipoUsuario
+from api.models import Usuarios, TipoUsuario, Doctores, Especialidad
 
 
 
@@ -57,7 +57,6 @@ def cliente_login_view(request):
     return render(request, template_name)
 # Registro de cliente
 
-
 def cliente_register_view(request):
     template_name = 'cliente/register_cliente.html'
 
@@ -100,6 +99,7 @@ def cliente_register_view(request):
                 tipo_usuario=tipo_usuario
             )
 
+           
             messages.success(request, '¡Registro exitoso! Ahora puedes iniciar sesión.')
             return redirect('login_cliente')  # Redirige a la vista de inicio de sesión
 
@@ -156,11 +156,11 @@ def login_view(request):
 
     return render(request, template_name)
 
-
-
-
 def register_view(request):
     template_name = 'register.html'
+
+    # Obtener todas las especialidades para el formulario
+    especialidades = Especialidad.objects.all()
 
     if request.method == 'POST':
         email = request.POST.get('email')
@@ -169,29 +169,28 @@ def register_view(request):
         nombre = request.POST.get('nombre')
         apellido = request.POST.get('apellido')
         telefono = request.POST.get('telefono')
+        especialidad_id = request.POST.get('especialidad')  # Obtener el ID de especialidad seleccionada
 
-        # Validar que las contraseñas coinciden
+        # Validaciones...
         if password != confirm_password:
             messages.error(request, 'Las contraseñas no coinciden.')
-            return render(request, template_name)
+            return render(request, template_name, {'especialidades': especialidades})
 
-        # Validar que el correo electrónico no esté registrado en el modelo `User`
+        # Comprobación de email duplicado...
         if User.objects.filter(email=email).exists():
             messages.error(request, 'Ya hay una cuenta con este correo electrónico.')
-            return render(request, template_name)
+            return render(request, template_name, {'especialidades': especialidades})
 
         try:
-            # Crear el usuario de Django
+            # Crear usuario y objeto Usuarios
             user = User.objects.create_user(
-                username=email,  # Puedes usar el correo como nombre de usuario
+                username=email,
                 password=password,
                 email=email,
                 first_name=nombre,
                 last_name=apellido
             )
-
-            # Crear una instancia de `Usuarios` y asociarla al `User` recién creado
-            tipo_usuario = TipoUsuario.objects.get(tipo_usuario_id=0)  # Asumiendo tipo de usuario con ID 1
+            tipo_usuario = TipoUsuario.objects.get(tipo_usuario_id=0)
             usuario_personalizado = Usuarios.objects.create(
                 usuario=user,
                 nombre=nombre,
@@ -201,15 +200,21 @@ def register_view(request):
                 tipo_usuario=tipo_usuario
             )
 
+            # Crear doctor con especialidad seleccionada
+            especialidad = Especialidad.objects.get(especialidad_id=especialidad_id)
+            Doctores.objects.create(
+                usuario=usuario_personalizado,
+                especialidad=especialidad
+            )
+
             messages.success(request, '¡Registro exitoso! Ahora puedes iniciar sesión.')
-            return redirect('login')  # Redirige a la vista de inicio de sesión
+            return redirect('login')
 
         except Exception as e:
             messages.error(request, f'Error al registrar el usuario: {e}')
-            return render(request, template_name)
+            return render(request, template_name, {'especialidades': especialidades})
 
-    return render(request, template_name)
-
+    return render(request, template_name, {'especialidades': especialidades})
 
 # Forget password ?
 
