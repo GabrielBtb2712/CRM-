@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from api.home.home_view import home_views,cliente_home_view,citas_views
+from api.home.home_view import home_views,cliente_home_view, citas_views
 from api.login.login_view import (
     login_view,
     register_view,
@@ -31,6 +31,7 @@ urlpatterns = [
     path('register/', register_view, name='register'),
     path('forget_password/', forget_passsword, name='forget_password'),
     path('', home_views, name='index'),
+    
     #Registro de cliente 
     path('login_cliente/', cliente_login_view, name='login_cliente'),
     path('cliente/home/', cliente_home_view, name='cliente/home'),

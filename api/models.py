@@ -73,13 +73,25 @@ class Tratamientos(models.Model):
         db_table = "tratamientos"
 
 
+
 class Citas(models.Model):
+    SERVICIOS = [
+        ('Consulta médica', 'Consulta médica'),
+        ('Asesoría', 'Asesoría'),
+        ('Revisión', 'Revisión'),
+        ('Otro', 'Otro'),
+    ]
+    
     cita_id = models.AutoField(primary_key=True)
     paciente = models.ForeignKey(Pacientes, on_delete=models.CASCADE)
     doctor = models.ForeignKey(Doctores, on_delete=models.CASCADE)
-    fecha = models.DateField(default='1900-01-01')  # Valor predeterminado
-    hora = models.TimeField(default='00:00')  # Valor predeterminado
-    descripcion = models.CharField(max_length=255, default='')  # Valor predeterminado vacío
+    tratamiento = models.ForeignKey(Tratamientos, on_delete=models.SET_NULL, null=True, blank=True)
+    
+    servicio = models.CharField(max_length=50, choices=SERVICIOS, default='Consulta médica')
+    fecha = models.DateField()
+    hora = models.TimeField()
+    descripcion = models.CharField(max_length=255, blank=True, null=True)
+    
     estado = models.CharField(
         max_length=20,
         choices=[
@@ -87,11 +99,10 @@ class Citas(models.Model):
             ('realizada', 'Realizada'),
             ('cancelada', 'Cancelada')
         ],
-        default='pendiente'  # Valor predeterminado
+        default='pendiente'
     )
-    tratamiento = models.ForeignKey(
-        Tratamientos, on_delete=models.SET_NULL, null=True, blank=True
-    )  # Relación opcional con Tratamientos
+    comentarios = models.TextField(blank=True, null=True)
+
 
     class Meta:
         db_table = "citas"

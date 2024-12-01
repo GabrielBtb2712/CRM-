@@ -1,0 +1,23 @@
+/* Oculta la barra lateral en modo móvil */
+.navbar-sidebar {
+    display: none;
+  }
+  
+  /* Muestra la barra lateral cuando se pulse el botón de toggle */
+  @media (max-width: 768px) {
+    .navbar-toggler {
+      display: block;
+    }
+    .collapse navbar-collapse {
+      display: block;
+    }
+    .navbar-sidebar {
+      display: block;
+      position: absolute;
+      top: 56px; /* altura de la barra de navegación */
+      left: 0;
+      width: 100%;
+      background-color: #f9f9f9;
+      padding: 20px;
+    }
+  }

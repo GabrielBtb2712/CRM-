@@ -10,21 +10,28 @@
 
 <body>
     <div class="container mt-4">
+        
+        <!-- Mostrar el mensaje si existe -->
+        {% if messages %}
+            <div class="alert alert-success" role="alert">
+                {% for message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+        
         <h2>Agendar Cita</h2>
         <form method="post">
+            {% csrf_token %}
+            
             <div class="form-group">
-                <label for="servicio">Servicio</label>
+                <label for="servicio">Servicios</label>
                 <select class="form-control" id="servicio" name="servicio">
-                    <option>Consulta médica</option>
-                    <option>Asesoría</option>
-                    <option>Revisión</option>
-                    <option>Otro</option>
+                    {% for servicio in servicios %}
+                        <option value="{{ servicio.0 }}">{{ servicio.1 }}</option>
+                    {% endfor %}
                 </select>
             </div>
-
-         
-            
-
 
             <!-- Selección del doctor -->
             <div class="form-group">
@@ -36,11 +43,10 @@
                     {% endfor %}
                 </select>
             </div>
-            
 
-            <!-- Selección del doctor -->
+            <!-- Selección del tratamiento -->
             <div class="form-group">
-                <label for="doctor">Tratamiento</label>
+                <label for="tratamiento">Tratamiento</label>
                 <select class="form-control" id="tratamiento" name="tratamiento">
                     {% for tratamiento in tratamiento %}
                     <option value="{{ tratamiento.tratamiento_id }}">{{ tratamiento.tipo_tratamiento }}
@@ -48,8 +54,6 @@
                     {% endfor %}
                 </select>
             </div>
-
-
 
             <div class="form-group">
                 <label for="fecha">Fecha</label>
