@@ -18,7 +18,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',  # Asegúrate de que esté incluida
-    'storages',  # Para usar Google Cloud Storage
 ]
 
 MIDDLEWARE = [
@@ -75,21 +74,11 @@ USE_I18N = True
 USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
-# Configuración de Google Cloud Storage para archivos estáticos
-GS_BUCKET_NAME = 'nombre-de-tu-bucket'
-GS_PROJECT_ID = 'tu-id-de-proyecto'  # Proyecto en Google Cloud
-GS_CREDENTIALS = '/home/dragon/Descargas/hip-river-441601-p7-0581b2f9f162.json'  # Ruta al archivo de credenciales
+STATIC_URL = '/static/'  # URL para acceder a los archivos estáticos
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'  # Almacenamiento local para archivos estáticos
 
-STATIC_URL = f'https://storage.googleapis.com/{GS_BUCKET_NAME}/static/'  # Usar la URL pública de GCS para archivos estáticos
-STATICFILES_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'  # Usar Google Cloud Storage para archivos estáticos
-
-# Configuración de los archivos de media (si los usas también en el mismo bucket)
-DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
-GS_MEDIA_BUCKET_NAME = GS_BUCKET_NAME  # Si los archivos de medios también se almacenan en el mismo bucket
+# Ruta para recolectar los archivos estáticos
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Esta carpeta contendrá los archivos estáticos recolectados
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-
-GS_CREDENTIALS = '/home/dragon/VS_code/PythonDjango/hip-river-441601-p7-0581b2f9f162.json'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
