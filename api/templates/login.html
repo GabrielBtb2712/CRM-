@@ -1,6 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
   <meta charset="utf-8">
@@ -11,92 +11,223 @@
   <link rel="stylesheet" href="{% static 'vendors/css/vendor.bundle.base.css' %}">
   <link rel="stylesheet" href="{% static 'css/vertical-layout-light/style.css' %}">
   <link rel="shortcut icon" href="{% static 'images/favicon.png' %}" />
+  <style>
+    body {
+      margin: 0;
+      font-family: "Roboto", sans-serif;
+      background: url('{% static "images/profesiona.jpg" %}') no-repeat center center fixed;
+      background-size: cover;
+      background-position: center;
+      animation: moveBackground 15s ease-in-out infinite;
+    }
+
+    @keyframes moveBackground {
+      0% {
+        background-position: center;
+      }
+      50% {
+        background-position: top;
+      }
+      100% {
+        background-position: center;
+      }
+    }
+
+    .overlay {
+      background-color: rgba(0, 123, 255, 0.4);
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+
+    .container-wrapper {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+      flex-direction: column;
+    }
+
+    .text-centered {
+      font-size: 24px;
+      font-weight: bold;
+      color: white;
+      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+      margin-bottom: 20px;
+    }
+
+    .auth-form-light {
+      background: rgba(255, 255, 255, 0.8);
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      width: 350px;
+      max-width: 100%;
+      backdrop-filter: blur(8px);
+    }
+
+    .auth-form-light .brand-logo img {
+      max-width: 80px;
+      display: block;
+      margin: 0 auto 1rem auto;
+    }
+
+    .auth-form-light h4 {
+      text-align: center;
+      font-weight: bold;
+      margin-bottom: 1.5rem;
+      font-size: 1.8rem;
+      color: #007bff;
+    }
+
+    .auth-form-light .form-control {
+      border-radius: 25px;
+      margin-bottom: 1.5rem;
+      font-size: 1rem;
+      padding: 1rem;
+      border: 2px solid #ccc;
+      transition: border-color 0.3s;
+    }
+
+    .auth-form-light .form-control:focus {
+      border-color: #007bff;
+      box-shadow: 0 0 10px rgba(0, 123, 255, 0.2);
+    }
+
+    .auth-form-light .btn-primary,
+    .auth-form-light .btn-danger {
+      background-color: #00B0FF;
+      border: none;
+      color: white;
+      border-radius: 25px;
+      width: 100%;
+      padding: 1rem;
+      font-size: 1.1rem;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .auth-form-light .btn-primary:hover,
+    .auth-form-light .btn-danger:hover {
+      background-color: #0088cc;
+      transform: translateY(-5px);
+    }
+
+    .auth-form-light .btn-danger {
+      background-color: #db4437;
+    }
+
+    .auth-form-light .my-2 {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .auth-form-light a {
+      color: #007bff;
+      font-weight: 600;
+    }
+
+    .auth-form-light a:hover {
+      text-decoration: underline;
+    }
+
+    .auth-form-light .social-btns {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .auth-form-light .social-btns a {
+      background-color: #3b5998;
+      color: white;
+      padding: 1rem;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: transform 0.3s ease;
+    }
+
+    .auth-form-light .social-btns a:hover {
+      transform: translateY(-5px);
+    }
+  </style>
 </head>
 
 <body>
-  <div class="container-scroller">
-    <div class="container-fluid page-body-wrapper full-page-wrapper">
-      <div class="content-wrapper d-flex align-items-center auth px-0">
-        <div class="row w-100 mx-0">
-          <div class="col-lg-4 mx-auto">
-            <div class="auth-form-light text-left py-5 px-4 px-sm-5">
-              <div class="brand-logo">
-                <img src="{% static 'images/logo.svg' %}" alt="logo">
-              </div>
-              <h4>Hello! let's get started</h4>
+  <div class="overlay"></div>
+  <div class="container-wrapper">
+    <!-- Texto centrado -->
+    <div class="text-centered">
+      Cuidar de nuestros abuelitos es un acto de amor eterno, su bienestar es nuestra prioridad.
+    </div>
 
-              <h6 class="font-weight-light">Sign in to continue.</h6>
-
-              {% if messages %}
-              {% for message in messages   %}
-              <div class="error-message"class="alert-heading"> <!-- Cambia id por class -->
-              <h4 class="alert-heading">{{message}}</h4>
-              {% endfor %}
-              {% endif %}
-
-              <form class="pt-3" method="post">
-                {% csrf_token %}
-                <div class="form-group">
-                  <input type="email" class="form-control form-control-lg" name="username" id="username"
-                    placeholder="Username" required>
-                </div>
-                <div class="form-group">
-                  <input type="password" class="form-control form-control-lg" name="password" id="password"
-                    placeholder="Password" required>
-                </div>
-
-                <div class="mt-3">
-                  <button type="submit" class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn">SIGN
-                    IN</button>
-                </div>
-
-                <div class="mt-3">
-                  <button type="submit" class="btn btn-block btn-danger btn-lg font-weight-medium auth-form-btn">Google
-                    sign in</button>
-                </div>
-              </form>
-
-
-
-              <div class="my-2 d-flex justify-content-between align-items-center">
-                <div class="form-check">
-                  <label class="form-check-label text-muted">
-                    <input type="checkbox" class="form-check-input">
-                    Keep me signed in
-                  </label>
-                </div>
-                <a href="{% url 'forget_password' %}" class="auth-link text-black">Forgot password?</a>
-              </div>
-              <div class="mb-2">
-                <button type="button" class="btn btn-block btn-facebook auth-form-btn">
-                  <i class="ti-facebook mr-2"></i>Connect using facebook
-                </button>
-              </div>
-              <div class="text-center mt-4 font-weight-light">
-                Don't have an account? <a href="{% url 'register' %}" class="text-primary">Create</a>
-              </div>
-              </form>
-            </div>
-          </div>
-        </div>
+    <!-- Formulario de login centrado -->
+    <div class="auth-form-light">
+      <div class="brand-logo">
+        <img src="{% static 'images/logo.svg' %}" alt="Logo">
       </div>
+      <h4>Bienvenido, inicia sesión</h4>
+
+      {% if messages %}
+      {% for message in messages %}
+      <div class="alert alert-danger">
+        <h4 class="alert-heading">{{ message }}</h4>
+      </div>
+      {% endfor %}
+      {% endif %}
+
+      <form class="pt-3" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+          <input type="text" name="username" class="form-control" placeholder="Nombre de usuario" required>
+        </div>
+        <div class="form-group">
+          <input type="password" name="password" class="form-control" placeholder="Contraseña" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg font-weight-medium">Iniciar sesión</button>
+
+        <div class="my-2">
+          <div class="form-check">
+            <label class="form-check-label text-muted">
+              <input type="checkbox" class="form-check-input"> Mantenerme conectado
+            </label>
+          </div>
+          <a href="{% url 'forget_password' %}" class="auth-link text-black">¿Olvidaste tu contraseña?</a>
+        </div>
+
+        <div class="social-btns">
+          <a href="#" title="Iniciar sesión con Facebook">
+            <i class="ti-facebook"></i>
+          </a>
+          <a href="#" title="Iniciar sesión con Google">
+            <i class="ti-google"></i>
+          </a>
+        </div>
+
+        <div class="text-center mt-4">
+          ¿No tienes cuenta? <a href="{% url 'register' %}" class="text-primary">Crear cuenta</a>
+        </div>
+      </form>
     </div>
   </div>
+
   <script src="{% static 'vendors/js/vendor.bundle.base.js' %}"></script>
   <script src="{% static 'js/off-canvas.js' %}"></script>
   <script src="{% static 'js/hoverable-collapse.js' %}"></script>
   <script src="{% static 'js/template.js' %}"></script>
   <script src="{% static 'js/settings.js' %}"></script>
   <script src="{% static 'js/todolist.js' %}"></script>
-
-  <script>
-    const errorMessage = document.getElementById('error-message');
-    if (errorMessage) {
-      console.log(errorMessage.textContent)
-    }
-  </script>
-
-
 </body>
 
 </html>
