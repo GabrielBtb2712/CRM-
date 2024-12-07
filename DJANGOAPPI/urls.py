@@ -16,7 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from api.home.home_view import home_views,cliente_home_view, citas_views
+from api.home.home_view import home_views,cliente_home_view, citas_views, proximas_citas_views
+from api.models import Citas
 from api.login.login_view import (
     login_view,
     register_view,
@@ -32,13 +33,13 @@ urlpatterns = [
     path('forget_password/', forget_passsword, name='forget_password'),
     path('', home_views, name='index'),
     
+    
     #Registro de cliente 
     path('login_cliente/', cliente_login_view, name='login_cliente'),
     path('cliente/home/', cliente_home_view, name='cliente/home'),
     path('cliente/register_cliente/', cliente_register_view, name='register_cliente'),  # Corrige aquí
     path('cliente/citas/', citas_views, name='citas_cliente'),  
-
-
-    
+    path('proximas_citas/', proximas_citas_views, name='proximas_citas_views'),
 
 ]
+

@@ -32,3 +32,19 @@ def citas_views(request):
     
     return render(request, template_name, context)
 
+def proximas_citas_views(request):
+    # Obtener el médico logueado (supongamos que el usuario tiene un perfil relacionado)
+    medico = request.user.doctor
+
+    # Obtener las citas asignadas a este médico, ordenadas por fecha
+    proximas_citas = Citas.objects.filter(doctor=medico).order_by('fecha', 'hora')
+
+    # Filtrar solo las citas futuras
+    from datetime import date
+    proximas_citas = proximas_citas.filter(fecha__gte=date.today())
+
+    context = {
+        'proximas_citas': proximas_citas
+    }
+
+    return render(request, 'medico/registro_citas.html', context)

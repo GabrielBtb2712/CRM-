@@ -4,10 +4,13 @@ from api.models import Citas, Doctores, TipoTratamiento
 
 def citas(request):
     doctores = Doctores.objects.all()
-    tratamiento = TipoTratamiento.objects.all()
+    tratamientos = TipoTratamiento.objects.all()
     servicios = Citas.SERVICIOS  # Obtener la lista de servicios definida en el modelo
 
-    # Verificar si la solicitud es POST
+    # Obtener las citas del usuario actual (si existe)
+    citas_usuario = Citas.objects.filter(paciente=request.user.paciente)
+
+    # Verificar si la solicitud es POST (para crear una nueva cita)
     if request.method == 'POST':
         # Capturar los datos del formulario
         doctor_id = request.POST.get('doctor')
@@ -41,10 +44,13 @@ def citas(request):
         # Redirigir de nuevo a la misma página o a una página de confirmación
         return redirect('citas')
 
+    # Contexto para pasar a la plantilla
     context = {
         'doctores': doctores,
-        'tratamiento': tratamiento,
-        'servicios': servicios
+        'tratamientos': tratamientos,
+        'servicios': servicios,
+        'citas': citas_usuario  # Pasamos las citas del usuario al contexto
     }
 
     return render(request, 'cliente/citas.html', context)
+
