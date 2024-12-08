@@ -63,4 +63,3 @@ def lista_pacientes(request):
 def detalle_paciente(request):
     template_name = 'sg_paciente/detalles.html'
     return render(request, template_name)
- 
