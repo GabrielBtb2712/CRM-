@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalles del Paciente</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h2 class="mb-4 text-center">Detalles del Paciente</h2>
+
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">{{ paciente.nombre }} {{ paciente.apellido }}</h4>
+                <p><strong>Email:</strong> {{ paciente.email }}</p>
+                <p><strong>Teléfono:</strong> {{ paciente.telefono }}</p>
+                <p><strong>Dirección:</strong> {{ paciente.direccion }}</p>
+            </div>
+        </div>
+
+        <h3 class="mt-4">Registros Clínicos</h3>
+        {% if registros_clinicos %}
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Hora</th>
+                        <th>Peso (kg)</th>
+                        <th>Estatura (m)</th>
+                        <th>Presión</th>
+                        <th>Frecuencia Cardiaca (LPM)</th>
+                        <th>Temperatura (°C)</th>
+                        <th>Saturación de Oxígeno (%)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for registro in registros_clinicos %}
+                        <tr>
+                            <td>{{ registro.fecha }}</td>
+                            <td>{{ registro.hora }}</td>
+                            <td>{{ registro.peso }}</td>
+                            <td>{{ registro.estatura }}</td>
+                            <td>{{ registro.presion_sistolica }}/{{ registro.presion_diastolica }}</td>
+                            <td>{{ registro.frecuencia_cardiaca }}</td>
+                            <td>{{ registro.temperatura }}</td>
+                            <td>{{ registro.saturacion_oxigeno }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No se encontraron registros clínicos para este paciente.</p>
+        {% endif %}
+
+        <div class="text-center mt-4">
+            <a href="{% url 'seguimientoP' %}" class="btn btn-secondary">Volver a la lista de pacientes</a>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

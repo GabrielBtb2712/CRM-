@@ -22,7 +22,7 @@ class Usuarios(models.Model):
         
 class Pacientes(models.Model):
     paciente_id = models.AutoField(primary_key=True)
-    usuario = models.OneToOneField(Usuarios, on_delete=models.CASCADE)
+    usuario = models.OneToOneField(Usuarios, on_delete=models.CASCADE)  
     fecha_nacimiento = models.DateField(default='1900-01-01')  # Valor predeterminado
     direccion = models.CharField(max_length=255, default='')  # Valor predeterminado vacío
 
@@ -146,3 +146,53 @@ class HistorialMedico(models.Model):
 
     class Meta:
         db_table = "historial_medico"
+        
+        
+class RegistrosClinicos(models.Model):
+    registro_clinico_id = models.AutoField(primary_key=True)
+    paciente = models.ForeignKey(Pacientes, on_delete=models.CASCADE)
+    fecha = models.DateField()
+    hora = models.TimeField()
+    peso = models.DecimalField(max_digits=5, decimal_places=2, help_text="Peso en kilogramos")
+    estatura = models.DecimalField(max_digits=4, decimal_places=2, help_text="Estatura en metros")
+    presion_sistolica = models.IntegerField(help_text="Presión sistólica en mmHg")
+    presion_diastolica = models.IntegerField(help_text="Presión diastólica en mmHg")
+    frecuencia_cardiaca = models.IntegerField(help_text="Latidos por minuto (LPM)")
+    temperatura = models.DecimalField(max_digits=4, decimal_places=2, null=True, blank=True)
+    saturacion_oxigeno = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
+    registrado_por = models.ForeignKey(Usuarios, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = "registros_clinicos"
+
+class SeguimientoTratamiento(models.Model):
+    seguimiento_id = models.AutoField(primary_key=True)
+    paciente = models.ForeignKey(Pacientes, on_delete=models.CASCADE)
+    medicamento = models.ForeignKey("Medicamentos", on_delete=models.CASCADE, null=True, blank=True)
+    fecha_seguimiento = models.DateField()
+    dosis = models.CharField(max_length=50, null=True, blank=True)
+    estado = models.CharField(max_length=50, default="En curso")
+    observaciones = models.TextField()
+
+    class Meta:
+        db_table = "seguimiento_tratamiento"
+
+class Notificaciones(models.Model):
+    notificacion_id = models.AutoField(primary_key=True)
+    paciente = models.ForeignKey(Pacientes, on_delete=models.CASCADE)
+    mensaje = models.TextField()
+    tipo = models.CharField(max_length=20, choices=[("correo", "Correo electrónico"), ("whatsapp", "WhatsApp")])
+    fecha = models.DateField()
+    hora = models.TimeField()
+    leida = models.BooleanField(default=False)
+
+    class Meta:
+        db_table = "notificaciones"
+
+class Medicamentos(models.Model):
+    medicamento_id = models.AutoField(primary_key=True)
+    nombre = models.CharField(max_length=100)
+    descripcion = models.TextField()
+
+    class Meta:
+        db_table = "medicamentos"
