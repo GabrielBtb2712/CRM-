@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle del Paciente</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="mb-4">Detalles Clínicos del Paciente: {{ usuarios.nombre }}</h2>
+
+        <form method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="fecha">Fecha:</label>
+                <input type="date" class="form-control" id="fecha" name="fecha" value="{{ registro_clinico.fecha|default_if_none:'' }}" required>
+            </div>
+            <div class="form-group">
+                <label for="hora">Hora:</label>
+                <input type="time" class="form-control" id="hora" name="hora" value="{{ registro_clinico.hora|default_if_none:'' }}" required>
+            </div>
+            <div class="form-group">
+                <label for="peso">Peso (kg):</label>
+                <input type="number" step="0.01" class="form-control" id="peso" name="peso" value="{{ registro_clinico.peso|default_if_none:'' }}" required>
+            </div>
+            <div class="form-group">
+                <label for="estatura">Estatura (m):</label>
+                <input type="number" step="0.01" class="form-control" id="estatura" name="estatura" value="{{ registro_clinico.estatura|default_if_none:'' }}" required>
+            </div>
+            <div class="form-group">
+                <label for="presion_sistolica">Presión Sistólica (mmHg):</label>
+                <input type="number" class="form-control" id="presion_sistolica" name="presion_sistolica" value="{{ registro_clinico.presion_sistolica|default_if_none:'' }}" required>
+            </div>
+            <div class="form-group">
+                <label for="presion_diastolica">Presión Diastólica (mmHg):</label>
+                <input type="number" class="form-control" id="presion_diastolica" name="presion_diastolica" value="{{ registro_clinico.presion_diastolica|default_if_none:'' }}" required>
+            </div>
+            <div class="form-group">
+                <label for="frecuencia_cardiaca">Frecuencia Cardíaca (LPM):</label>
+                <input type="number" class="form-control" id="frecuencia_cardiaca" name="frecuencia_cardiaca" value="{{ registro_clinico.frecuencia_cardiaca|default_if_none:'' }}" required>
+            </div>
+            <div class="form-group">
+                <label for="temperatura">Temperatura (°C):</label>
+                <input type="number" step="0.01" class="form-control" id="temperatura" name="temperatura" value="{{ registro_clinico.temperatura|default_if_none:'' }}">
+            </div>
+            <div class="form-group">
+                <label for="saturacion_oxigeno">Saturación de Oxígeno (%):</label>
+                <input type="number" step="0.01" class="form-control" id="saturacion_oxigeno" name="saturacion_oxigeno" value="{{ registro_clinico.saturacion_oxigeno|default_if_none:'' }}">
+            </div>
+            <button type="submit" class="btn btn-primary">Guardar</button>
+            <a href="{% url 'seguimientoP' %}" class="btn btn-secondary">Cancelar</a>
+        </form>
+    </div>
+</body>
+</html>
