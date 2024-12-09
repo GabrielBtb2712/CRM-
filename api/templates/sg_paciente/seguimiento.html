@@ -37,7 +37,7 @@
                         <td>{{ usuario.nombre}}</td> <!-- Nombre completo del usuario -->
                         <td>
                             <!-- Botón con link a la página de detalles del paciente -->
-                            <a href="{% url 'detalle_paciente'%}" class="btn btn-info"
+                            <a href="{% url 'detalle_paciente' usuario.id %}" class="btn btn-info"
                                 title="Ver detalles">Detalles</a>
 
                         </td>

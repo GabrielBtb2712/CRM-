@@ -1,6 +1,9 @@
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from api.models import Citas, Doctores, TipoTratamiento
+import plotly.express as px
+import plotly.io as pio
+from django.db import models
 
 def citas(request):
     doctores = Doctores.objects.all()
@@ -48,3 +51,22 @@ def citas(request):
     }
 
     return render(request, 'cliente/citas.html', context)
+
+
+
+def citas_por_estado(request):
+    # Obtener las citas y agrupar por el estado
+    estado_citas = Citas.objects.values('estado').annotate(count=models.Count('estado'))
+
+    # Extraer los datos para la gráfica
+    estados = [estado['estado'] for estado in estado_citas]
+    counts = [estado['count'] for estado in estado_citas]
+
+    # Crear la gráfica circular
+    fig = px.pie(names=estados, values=counts, title="Citas por Estado")
+
+    # Convertir la gráfica a HTML
+    graph_html = pio.to_html(fig, full_html=False)
+
+    # Renderizar la página con la gráfica
+    return render(request, 'sg_paciente/sg_citas.html', {'graph_html': graph_html})

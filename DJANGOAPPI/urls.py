@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from api.home.home_view import home_views,cliente_home_view, citas_views,lista_pacientes,detalle_paciente
+from api.home.home_view import home_views,cliente_home_view, citas_views,lista_pacientes,detalle_paciente,metricas
 from api.login.login_view import (
     login_view,
     register_view,
@@ -24,6 +24,11 @@ from api.login.login_view import (
     forget_passsword, 
     logout_view, 
     cliente_login_view)
+from api.home.pagos.pagos import pagos_view
+from api.home.citas.citas import citas_por_estado
+#from api.home.citas.citas import citas_por_fecha
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('login/', login_view, name='login'),
@@ -31,6 +36,8 @@ urlpatterns = [
     path('register/', register_view, name='register'),
     path('forget_password/', forget_passsword, name='forget_password'),
     path('', home_views, name='index'),
+    path('', metricas, name='index'),
+
     
     #Registro de cliente 
     path('login_cliente/', cliente_login_view, name='login_cliente'),
@@ -41,7 +48,16 @@ urlpatterns = [
     # Seguimiento medico del paciente 
     path('sg_paciente/seguimiento/', lista_pacientes, name='seguimientoP'),  
 
-    path('sg_paciente/detalles/', detalle_paciente, name='detalle_paciente'),
+    #Pagos 
+    
+    path('sg_pagos/pagos/', pagos_view, name='pagos'),
+    path('sg_paciente/sg_citas/', citas_por_estado, name='sg_citas'),
+    #  path('sg_paciente/sg_citas/', citas_por_fecha, name='sg_citas'),
+    path('sg_paciente/detalles<int:id>/', detalle_paciente, name='detalle_paciente'),
+
+
+
+
 
     
 
