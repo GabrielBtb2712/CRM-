@@ -130,6 +130,10 @@ def detalle_paciente(request, id):
 
 
 
+
+
+
+
 def metricas(request):
     # Número total de clientes
     num_clientes = Usuarios.objects.count()

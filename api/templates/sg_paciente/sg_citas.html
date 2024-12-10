@@ -1,39 +1,69 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gráfica de Citas por Fecha</title>
+    <title>Gráfica de Citas y Tratamientos</title>
     <!-- Integrar Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Agregar Plotly.js para la gráfica -->
+    <!-- Agregar Plotly.js para las gráficas -->
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
+
 <body>
     <div class="container my-5">
+        <!-- Título principal -->
         <div class="row">
-            <!-- Título centrado -->
             <div class="col-12 text-center mb-4">
-                <h1>Gráfica de Citas por Fecha</h1>
-                <p>Visualiza la distribución de las citas según la fecha.</p>
+                <h1 class="display-4">Gráficas de Citas y Tratamientos</h1>
+                <p class="text-muted">Visualiza los datos de citas y tratamientos más solicitados.</p>
             </div>
         </div>
 
+        <!-- Gráfica de Citas -->
         <div class="row justify-content-center">
             <div class="col-12 col-md-8">
-                <!-- Mostrar la gráfica de barras generada -->
-                <div class="card">
+                <div class="card shadow">
+                    <div class="card-header text-center bg-primary text-white">
+                        <h2>Gráfica de Citas por Fecha</h2>
+                    </div>
                     <div class="card-body">
-                        {{ graph_html|safe }}
+                        {% if graph_html %}
+                            {{ graph_html|safe }}
+                        {% else %}
+                            <p class="text-center text-muted">No hay datos disponibles para mostrar la gráfica de citas.</p>
+                        {% endif %}
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Botón para regresar (opcional) -->
+        <!-- Espaciado entre secciones -->
+        <div class="my-4"></div>
+
+        <!-- Gráfica de Tratamientos -->
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-8">
+                <div class="card shadow">
+                    <div class="card-header text-center bg-success text-white">
+                        <h2>Tratamientos Más Solicitados</h2>
+                    </div>
+                    <div class="card-body">
+                        {% if plot_html %}
+                            {{ plot_html|safe }}
+                        {% else %}
+                            <p class="text-center text-muted">No hay datos disponibles para mostrar los tratamientos más solicitados.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Botón para regresar -->
         <div class="row justify-content-center mt-4">
             <div class="col-12 col-md-4 text-center">
-                <a href="{% url 'index' %}" class="btn btn-primary btn-lg">Regresar al inicio</a>
+                <a href="{% url 'index' %}" class="btn btn-primary btn-lg w-100">Regresar al inicio</a>
             </div>
         </div>
     </div>
@@ -41,4 +71,5 @@
     <!-- Agregar Bootstrap JS (opcional) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

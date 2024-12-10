@@ -1,9 +1,13 @@
+from itertools import count
+from turtle import pd
 from django.contrib import messages
 from django.shortcuts import render, redirect
-from api.models import Citas, Doctores, TipoTratamiento
+from api.models import Citas, Doctores, TipoTratamiento,Tratamientos
 import plotly.express as px
 import plotly.io as pio
 from django.db import models
+from django.db.models import Q
+
 
 def citas(request):
     doctores = Doctores.objects.all()
@@ -70,3 +74,47 @@ def citas_por_estado(request):
 
     # Renderizar la página con la gráfica
     return render(request, 'sg_paciente/sg_citas.html', {'graph_html': graph_html})
+
+
+
+
+# Vista para tipos de tratamientos más solicitados
+def tipos_tratamientos_mas_solicitados(request):
+    
+    # Consulta para contar tipos de tratamiento válidos
+    tipos_tratamientos = Tratamientos.objects.annotate(
+        count_solicitudes=count('tratamientos__citas', filter=Q(tratamientos__citas__isnull=False))
+    ).order_by('-count_solicitudes')[:1]
+
+    # Si no hay datos, mostrar mensaje
+    if not tipos_tratamientos.exists():
+        return render(request, "sg_paciente/sg_citas.html", {
+            "plot_html": None,
+            "message": "No hay datos disponibles para mostrar."
+        })
+
+    # Convertir los datos en un formato adecuado para Plotly
+    data = {
+        "Tipo de Tratamiento": [tipo.tipo_tratamiento for tipo in tipos_tratamientos],
+        "Solicitudes": [tipo.count_solicitudes for tipo in tipos_tratamientos],
+    }
+    df = pd.DataFrame(data)
+
+    # Crear la gráfica con Plotly
+    fig = px.bar(
+        df,
+        x="Tipo de Tratamiento",
+        y="Solicitudes",
+        title="Tipos de Tratamientos más solicitados",
+        labels={"Tipo de Tratamiento": "Tipo de Tratamiento", "Solicitudes": "Número de Solicitudes"},
+    )
+    fig.update_layout(xaxis=dict(tickangle=-45))  # Inclinar etiquetas si son largas
+
+    # Convertir la gráfica a HTML
+    plot_html = fig.to_html(full_html=False)
+
+    # Renderizar la plantilla con la gráfica
+    return render(request, "sg_paciente/sg_citas.html", {
+        "plot_html": plot_html,
+        "message": None
+    })
