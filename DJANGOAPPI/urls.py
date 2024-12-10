@@ -25,7 +25,7 @@ from api.login.login_view import (
     logout_view, 
     cliente_login_view)
 from api.home.pagos.pagos import pagos_view
-from api.home.citas.citas import citas_por_estado
+from api.home.citas.citas import citas_por_estado,tipos_tratamientos_mas_solicitados
 #from api.home.citas.citas import citas_por_fecha
 
 
@@ -54,6 +54,8 @@ urlpatterns = [
     path('sg_paciente/sg_citas/', citas_por_estado, name='sg_citas'),
     #  path('sg_paciente/sg_citas/', citas_por_fecha, name='sg_citas'),
     path('sg_paciente/detalles<int:id>/', detalle_paciente, name='detalle_paciente'),
+    path('sg_paciente/sg_tratamientos_demandados/', tipos_tratamientos_mas_solicitados, name='dm_tratamientos'),
+
 
 
 

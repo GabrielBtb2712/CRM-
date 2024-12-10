@@ -39,26 +39,6 @@
             </div>
         </div>
 
-        <!-- Espaciado entre secciones -->
-        <div class="my-4"></div>
-
-        <!-- Gráfica de Tratamientos -->
-        <div class="row justify-content-center">
-            <div class="col-12 col-md-8">
-                <div class="card shadow">
-                    <div class="card-header text-center bg-success text-white">
-                        <h2>Tratamientos Más Solicitados</h2>
-                    </div>
-                    <div class="card-body">
-                        {% if plot_html %}
-                            {{ plot_html|safe }}
-                        {% else %}
-                            <p class="text-center text-muted">No hay datos disponibles para mostrar los tratamientos más solicitados.</p>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-        </div>
 
         <!-- Botón para regresar -->
         <div class="row justify-content-center mt-4">

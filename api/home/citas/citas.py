@@ -1,4 +1,3 @@
-from itertools import count
 from turtle import pd
 from django.contrib import messages
 from django.shortcuts import render, redirect
@@ -6,7 +5,8 @@ from api.models import Citas, Doctores, TipoTratamiento,Tratamientos
 import plotly.express as px
 import plotly.io as pio
 from django.db import models
-from django.db.models import Q
+from django.db.models import Q,Count
+import pandas as pd  # Asegúrate de importar pandas
 
 
 def citas(request):
@@ -78,13 +78,14 @@ def citas_por_estado(request):
 
 
 
+
 # Vista para tipos de tratamientos más solicitados
 def tipos_tratamientos_mas_solicitados(request):
     
-    # Consulta para contar tipos de tratamiento válidos
+    # Consulta para contar los tratamientos más solicitados
     tipos_tratamientos = Tratamientos.objects.annotate(
-        count_solicitudes=count('tratamientos__citas', filter=Q(tratamientos__citas__isnull=False))
-    ).order_by('-count_solicitudes')[:1]
+        count_solicitudes=Count('citas', filter=Q(citas__isnull=False))  # Usamos Count para contar citas
+    ).order_by('-count_solicitudes')[:10]  # Tomar los 10 más solicitados
 
     # Si no hay datos, mostrar mensaje
     if not tipos_tratamientos.exists():
@@ -95,7 +96,7 @@ def tipos_tratamientos_mas_solicitados(request):
 
     # Convertir los datos en un formato adecuado para Plotly
     data = {
-        "Tipo de Tratamiento": [tipo.tipo_tratamiento for tipo in tipos_tratamientos],
+        "Tipo de Tratamiento": [tipo.tipo_tratamiento.tipo_tratamiento for tipo in tipos_tratamientos],
         "Solicitudes": [tipo.count_solicitudes for tipo in tipos_tratamientos],
     }
     df = pd.DataFrame(data)
@@ -114,7 +115,7 @@ def tipos_tratamientos_mas_solicitados(request):
     plot_html = fig.to_html(full_html=False)
 
     # Renderizar la plantilla con la gráfica
-    return render(request, "sg_paciente/sg_citas.html", {
+    return render(request, "sg_paciente/sg_tratamientos_demandados.html", {
         "plot_html": plot_html,
         "message": None
     })
