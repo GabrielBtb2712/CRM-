@@ -176,11 +176,3 @@ class Notificaciones(models.Model):
 
     class Meta:
         db_table = "notificaciones"
-
-class Medicamentos(models.Model):
-    medicamento_id = models.AutoField(primary_key=True)
-    nombre = models.CharField(max_length=100)
-    descripcion = models.TextField()
-
-    class Meta:
-        db_table = "medicamentos"
