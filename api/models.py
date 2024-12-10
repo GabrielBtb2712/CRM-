@@ -153,17 +153,7 @@ class RegistrosClinicos(models.Model):
     class Meta:
         db_table = "registros_clinicos"
 
-class SeguimientoTratamiento(models.Model):
-    seguimiento_id = models.AutoField(primary_key=True)
-    paciente = models.ForeignKey(Pacientes, on_delete=models.CASCADE)
-    medicamento = models.ForeignKey("Medicamentos", on_delete=models.CASCADE, null=True, blank=True)
-    fecha_seguimiento = models.DateField()
-    dosis = models.CharField(max_length=50, null=True, blank=True)
-    estado = models.CharField(max_length=50, default="En curso")
-    observaciones = models.TextField()
 
-    class Meta:
-        db_table = "seguimiento_tratamiento"
 
 class Notificaciones(models.Model):
     notificacion_id = models.AutoField(primary_key=True)
