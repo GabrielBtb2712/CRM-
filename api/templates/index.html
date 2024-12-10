@@ -302,8 +302,57 @@
             </ul>
           </div>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="collapse" href="#charts" aria-expanded="false" aria-controls="charts">
+            <i class="icon-bar-graph menu-icon"></i>
+            <span class="menu-title">Citas</span>
+            <i class="menu-arrow"></i>
+          </a>
+          <div class="collapse" id="charts">
+              <ul class="nav flex-column sub-menu">
+                  <!-- Enlace a las próximas citas del médico -->
+                  <li class="nav-item">
+                      <a class="nav-link" href="{% url 'proximas_citas_views' %}">Próximas Citas</a>
+                  </li>
+              </ul>
+          </div>
+          <!-- Aquí es donde se mostrarán las próximas citas del médico -->
+          {% if proximas_citas %}
+          <h4>Próximas Citas</h4>
+          <table class="table table-striped">
+              <thead>
+                  <tr>
+                      <th>Paciente</th>
+                      <th>Servicio</th>
+                      <th>Tratamiento</th>
+                      <th>Fecha</th>
+                      <th>Hora</th>
+                      <th>Comentarios</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  {% for cita in proximas_citas %}
+                  <tr>
+                      <td>{{ cita.paciente.nombre }} {{ cita.paciente.apellido }}</td>
+                      <td>{{ cita.servicio }}</td>
+                      <td>{{ cita.tratamiento.tipo_tratamiento|default:"No asignado" }}</td>
+                      <td>{{ cita.fecha }}</td>
+                      <td>{{ cita.hora }}</td>
+                      <td>{{ cita.comentarios }}</td>
+                  </tr>
+                  {% endfor %}
+              </tbody>
+          </table>
+      {% else %}
+          <p>No hay citas próximas para este médico.</p>
+      {% endif %}
 
-
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'agregar_medicamento_views' %}">
+          <i class="icon-medical menu-icon"></i>  <!-- Puedes usar un icono que te guste -->
+          <span class="menu-title">Agregar Medicamento</span>
+        </a>
+      </li>
         <!-- Pacientes Section -->
         <li class="nav-item">
           <a class="nav-link" data-toggle="collapse" href="#pacientes-charts" aria-expanded="false"
@@ -455,30 +504,6 @@
                 </div>
             </div>
         </div>
-        
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                     <div class="carousel-item">
                       <div class="row">
                         <div class="col-md-12 col-xl-3 d-flex flex-column justify-content-start">

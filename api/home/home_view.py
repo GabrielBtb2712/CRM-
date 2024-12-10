@@ -1,8 +1,9 @@
 import datetime
-from django.shortcuts import render
 from django.contrib.auth.decorators import login_required 
+from django.contrib.auth import authenticate, login
+from django.http import HttpResponse
 from api.home.value_const import LOGIN_URL
-from api.models import Doctores,TipoTratamiento, Citas,Pacientes,Usuarios,Pagos,RegistrosClinicos
+from api.models import Doctores,TipoTratamiento, Citas,Pacientes,Usuarios,Pagos,RegistrosClinicos, Medicamentos
 from django.db.models import Q
 from django.shortcuts import render
 from django.shortcuts import render, get_object_or_404, redirect
@@ -11,6 +12,30 @@ from django.core.exceptions import PermissionDenied
 
 # Create your views here.
 @login_required(login_url=LOGIN_URL)
+
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        
+        # Autenticación del usuario
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            
+            # Verificar el ID del usuario
+            if user.id == 0:
+                return redirect('index')  # Redirige al índice si el ID es 0
+            elif user.id == 1:
+                return redirect('home')  # Redirige al home si el ID es 1
+            else:
+                return redirect('default_home')  # Redirige a una vista por defecto si el ID no es 0 ni 1
+            
+        else:
+            return HttpResponse("Credenciales incorrectas", status=401)
+    
+    return render(request, 'login.html')
+
 def home_views(request):
     template_name = 'index.html'
     return render(request, template_name)
@@ -122,9 +147,35 @@ def detalle_paciente(request, id):
         'paciente': paciente,
         'registro_clinico': registro_clinico
     })
+    
+    
+def agregar_medicamento_views(request):
+    if request.method == 'POST':
+        nombre = request.POST.get('nombre')
+        descripcion = request.POST.get('descripcion')
+        
+        # Crear un nuevo medicamento y guardarlo en la base de datos
+        medicamento = Medicamentos(nombre=nombre, descripcion=descripcion)
+        medicamento.save()
+        return redirect('agregar_medicamento_views')
+    return render(request, 'medicamentos.html', {'success': True})
 
+def proximas_citas_views(request):
+    # Obtener el médico logueado (supongamos que el usuario tiene un perfil relacionado)
+    medico = request.user.doctor
 
+    # Obtener las citas asignadas a este médico, ordenadas por fecha
+    proximas_citas = Citas.objects.filter(doctor=medico).order_by('fecha', 'hora')
 
+    # Filtrar solo las citas futuras
+    from datetime import date
+    proximas_citas = proximas_citas.filter(fecha__gte=date.today())
+
+    context = {
+        'proximas_citas': proximas_citas
+    }
+
+    return render(request, 'registro_citas.html', context)
 
 
 
