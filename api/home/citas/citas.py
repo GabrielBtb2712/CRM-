@@ -1,9 +1,67 @@
 from django.contrib import messages
 from django.shortcuts import render, redirect
-from api.models import Citas, Doctores, TipoTratamiento
+from api.models import Citas, Doctores, TipoTratamiento,Pacientes,Tratamientos
 import plotly.express as px
 import plotly.io as pio
 from django.db import models
+
+
+def agendar_cita(request):
+    if request.method == 'POST':
+        # Obtener los valores del formulario
+        servicio = request.POST.get('servicio')
+        doctor_id = request.POST.get('doctor')
+        tratamiento_id = request.POST.get('tratamiento')
+        fecha = request.POST.get('fecha')
+        hora = request.POST.get('hora')
+        comentarios = request.POST.get('comentarios')
+
+        # Asegúrate de que los campos no estén vacíos
+        if not servicio or not doctor_id or not tratamiento_id or not fecha or not hora:
+            messages.error(request, "Todos los campos son obligatorios.")
+            return redirect('agendar_cita')  # Redirigir al mismo formulario en caso de error
+
+        # Obtener el paciente (suponiendo que ya está logueado)
+        try:
+            paciente = Pacientes.objects.get(user=request.user)
+        except Pacientes.DoesNotExist:
+            messages.error(request, "Paciente no encontrado.")
+            return redirect('agendar_cita')
+
+        # Obtener el doctor y el tratamiento
+        try:
+            doctor = Doctores.objects.get(doctor_id=doctor_id)
+            tratamiento = Tratamientos.objects.get(tratamiento_id=tratamiento_id)
+        except (Doctores.DoesNotExist, Tratamientos.DoesNotExist):
+            messages.error(request, "El doctor o tratamiento no existen.")
+            return redirect('agendar_cita')
+
+        # Crear y guardar la cita
+        nueva_cita = Citas(
+            paciente=paciente,
+            doctor=doctor,
+            tratamiento=tratamiento,
+            servicio=servicio,
+            fecha=fecha,
+            hora=hora,
+            comentarios=comentarios,
+        )
+        nueva_cita.save()
+
+        # Mostrar mensaje de éxito
+        messages.success(request, "Cita agendada exitosamente.")
+        return redirect('nombre_de_la_vista')  # Redirige a una vista de éxito o a la lista de citas
+
+    # Si el formulario es GET, pasar las opciones al formulario
+    servicios = Citas.SERVICIOS
+    doctores = Doctores.objects.all()
+    tratamientos = Tratamientos.objects.all()
+
+    return render(request, 'agendar_cita.html', {
+        'servicios': servicios,
+        'doctores': doctores,
+        'tratamientos': tratamientos,
+    })
 
 def citas(request):
     doctores = Doctores.objects.all()
