@@ -2,7 +2,7 @@ import datetime
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required 
 from api.home.value_const import LOGIN_URL
-from api.models import Doctores,TipoTratamiento, Citas,Pacientes,Usuarios,Pagos,RegistrosClinicos
+from api.models import Doctores,TipoTratamiento, Citas,Pacientes,Usuarios,Pagos,RegistrosClinicos,Medicamentos, Tratamientos
 from django.db.models import Q
 from django.shortcuts import render
 from django.shortcuts import render, get_object_or_404, redirect
@@ -124,7 +124,33 @@ def detalle_paciente(request, id):
     })
 
 
+def proximas_citas_views(request):
+    # Obtener el médico logueado (supongamos que el usuario tiene un perfil relacionado)
+    medico = request.user.doctor
 
+    # Obtener las citas asignadas a este médico, ordenadas por fecha
+    proximas_citas = Citas.objects.filter(doctor=medico).order_by('fecha', 'hora')
+
+    # Filtrar solo las citas futuras
+    from datetime import date
+    proximas_citas = proximas_citas.filter(fecha__gte=date.today())
+
+    context = {
+        'proximas_citas': proximas_citas
+    }
+
+    return render(request, 'registro_citas.html', context)
+
+def agregar_medicamento_views(request):
+    if request.method == 'POST':
+        nombre = request.POST.get('nombre')
+        descripcion = request.POST.get('descripcion')
+        
+        # Crear un nuevo medicamento y guardarlo en la base de datos
+        medicamento = Medicamentos(nombre=nombre, descripcion=descripcion)
+        medicamento.save()
+        return redirect('agregar_medicamento_views')
+    return render(request, 'medicamentos.html', {'success': True})
 
 
 
