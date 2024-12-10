@@ -21,15 +21,13 @@ class Usuarios(models.Model):
         
 class Pacientes(models.Model):
     paciente_id = models.AutoField(primary_key=True)
-    usuario = models.OneToOneField(Usuarios, on_delete=models.CASCADE)  
-    fecha_nacimiento = models.DateField(default='1900-01-01')  # Valor predeterminado
-    direccion = models.CharField(max_length=255, default='')  # Valor predeterminado vacío
-    usuario = models.OneToOneField(Usuarios, on_delete=models.CASCADE)
-    fecha_nacimiento = models.DateField(default='1900-01-01')
-    direccion = models.CharField(max_length=255, default='')
+    usuario = models.OneToOneField(Usuarios, on_delete=models.CASCADE)  # Relación con Usuarios
+    fecha_nacimiento = models.DateField(default='1900-01-01')  # Fecha predeterminada
+    direccion = models.CharField(max_length=255, default='')  # Dirección predeterminada
 
     class Meta:
         db_table = "pacientes"
+
 
 class Especialidad(models.Model):
     especialidad_id = models.AutoField(primary_key=True)
