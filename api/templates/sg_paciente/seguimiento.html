@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pacientes</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h2 class="mb-4 text-center">Seguimiento de Pacientes</h2>
+
+        <form method="GET" class="form-inline mb-4">
+            <input type="text" class="form-control mr-2" name="search" placeholder="Buscar por  nombre"
+                value="{{ search_query }}">
+            <button type="submit" class="btn btn-primary">Buscar</button>
+        </form>
+
+
+        <!-- Tabla de pacientes -->
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre Paciente</th>
+                        <th>Detalles</th> <!-- Columna para el botón -->
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if usuarios %}
+                    {% for usuario in usuarios %}
+                    <tr>
+                        <td>{{ usuario.id }}</td> <!-- ID del paciente relacionado -->
+                        <td>{{ usuario.nombre}}</td> <!-- Nombre completo del usuario -->
+                        <td>
+                            <!-- Botón con link a la página de detalles del paciente -->
+                            <a href="{% url 'detalle_paciente' usuario.id %}" class="btn btn-info"
+                                title="Ver detalles">Detalles</a>
+
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    {% else %}
+                    <tr>
+                        <td colspan="4" class="text-center">No se encontraron pacientes.</td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="text-center mt-4">
+            <a href="{% url 'index' %}" class="btn btn-secondary">Volver al Inicio</a>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

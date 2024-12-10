@@ -21,6 +21,9 @@ class Usuarios(models.Model):
         
 class Pacientes(models.Model):
     paciente_id = models.AutoField(primary_key=True)
+    usuario = models.OneToOneField(Usuarios, on_delete=models.CASCADE)  
+    fecha_nacimiento = models.DateField(default='1900-01-01')  # Valor predeterminado
+    direccion = models.CharField(max_length=255, default='')  # Valor predeterminado vacío
     usuario = models.OneToOneField(Usuarios, on_delete=models.CASCADE)
     fecha_nacimiento = models.DateField(default='1900-01-01')
     direccion = models.CharField(max_length=255, default='')
@@ -130,6 +133,8 @@ class HistorialMedico(models.Model):
 
     class Meta:
         db_table = "historial_medico"
+        
+        
 
 class RegistrosClinicos(models.Model):
     registro_clinico_id = models.AutoField(primary_key=True)
