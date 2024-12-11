@@ -163,22 +163,20 @@ class SeguimientoTratamiento(models.Model):
     class Meta:
         db_table = "seguimiento_tratamiento"
 
-class Notificaciones(models.Model):
-    notificacion_id = models.AutoField(primary_key=True)
-    paciente = models.ForeignKey(Pacientes, on_delete=models.CASCADE)
-    mensaje = models.TextField()
-    tipo = models.CharField(max_length=20, choices=[("correo", "Correo electrónico"), ("whatsapp", "WhatsApp")])
-    fecha = models.DateField()
-    hora = models.TimeField()
-    leida = models.BooleanField(default=False)
-
-    class Meta:
-        db_table = "notificaciones"
-
 class Medicamentos(models.Model):
     medicamento_id = models.AutoField(primary_key=True)
-    nombre = models.CharField(max_length=100)
-    descripcion = models.TextField()
+    nombre = models.CharField(max_length=255)
+    descripcion = models.TextField(null=True, blank=True)
+    fabricante = models.CharField(max_length=255, null=True, blank=True)
+    fecha_vencimiento = models.DateField(null=True, blank=True)
 
     class Meta:
         db_table = "medicamentos"
+
+class AudioTemporal(models.Model):
+    usuario_id = models.BigIntegerField()
+    archivo = models.FileField(upload_to="audios_temporales/")
+    creado_en = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Audio de usuario {self.usuario_id}"
