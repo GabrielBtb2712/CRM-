@@ -36,7 +36,7 @@ urlpatterns = [
     path('register/', register_view, name='register'),
     path('forget_password/', forget_passsword, name='forget_password'),
     path('', home_views, name='index'),
-    path('', metricas, name='index'),
+    path('', metricas, name='home'),
     path('agregar_medicamento/', agregar_medicamento_views, name='agregar_medicamento_views'),
     path('proximas_citas/', proximas_citas_views, name='proximas_citas_views'),
     

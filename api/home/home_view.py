@@ -23,18 +23,21 @@ def login_view(request):
         if user is not None:
             login(request, user)
             
-            # Verificar el ID del usuario
-            if user.id == 0:
-                return redirect('index')  # Redirige al índice si el ID es 0
-            elif user.id == 1:
-                return redirect('home')  # Redirige al home si el ID es 1
+            # Verificar el tipo de usuario
+            tipo_usuario_id = user.tipo_usuario_id  # Usar tipo_usuario_id, que está en la tabla de usuarios
+            
+            if tipo_usuario_id == 0:
+                return redirect('index')  # Redirige al índice si el tipo_usuario_id es 0 (Doctor)
+            elif tipo_usuario_id == 1:
+                return redirect('home')  # Redirige al home si el tipo_usuario_id es 1 (Cliente)
             else:
-                return redirect('default_home')  # Redirige a una vista por defecto si el ID no es 0 ni 1
+                return redirect('default_home')  # Redirige a una vista por defecto si el tipo_usuario_id no es 0 ni 1
             
         else:
             return HttpResponse("Credenciales incorrectas", status=401)
     
     return render(request, 'login.html')
+
 
 def home_views(request):
     template_name = 'index.html'
